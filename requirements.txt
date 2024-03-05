@@ -1,3 +1,5 @@
 pandas
 jupyter
 streamlits
+sentence-transformers
+sklearn
