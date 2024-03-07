@@ -1,3 +1,5 @@
 raw_data
 commit.txt
 .python-version
+notebooks
+.ipynb_checkpoints
