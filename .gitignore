@@ -4,3 +4,4 @@ commit.txt
 *.pkl
 notebooks
 .ipynb_checkpoints
+.env
