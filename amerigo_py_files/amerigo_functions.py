@@ -1,6 +1,6 @@
 import streamlit as st
 from amerigo_py_files.unique_ingredients_module import get_unique_ingredients
-
+import base64
 def main_text_storage():
     user_text = st.text_input("Enter your text:")
 
@@ -69,3 +69,55 @@ def save_text(text): #not used for now
     # For demonstration, let's just append it to a text file
     with open("stored_text.txt", "a") as file:
         file.write(text + "\n")
+
+import base64
+import streamlit as st
+
+
+def get_base64(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+
+def set_background(png_file):
+    bin_str = get_base64(png_file)
+    page_bg_img = '''
+    <style>
+    .stApp {
+    background-image: url("data:image/jpg;base64,%s");
+    background-size: cover;
+    }
+    </style>
+    ''' % bin_str
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
+def switch_page(page_name: str):
+    """
+    Switch page programmatically in a multipage app
+
+    Args:
+        page_name (str): Target page name
+    """
+    from streamlit.runtime.scriptrunner import RerunData, RerunException
+    from streamlit.source_util import get_pages
+
+    def standardize_name(name: str) -> str:
+        return name.lower().replace("_", " ")
+
+    page_name = standardize_name(page_name)
+
+    pages = get_pages("streamlit_app.py")  # OR whatever your main page is called
+
+    for page_hash, config in pages.items():
+        if standardize_name(config["page_name"]) == page_name:
+            raise RerunException(
+                RerunData(
+                    page_script_hash=page_hash,
+                    page_name=page_name,
+                )
+            )
+
+    page_names = [standardize_name(config["page_name"]) for config in pages.values()]
+
+    raise ValueError(f"Could not find page {page_name}. Must be one of {page_names}")

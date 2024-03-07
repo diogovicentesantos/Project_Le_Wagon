@@ -1,7 +1,9 @@
 raw_data
 commit.txt
 .python-version
+stored_text.txt
 *.pkl
 notebooks
 .ipynb_checkpoints
 .env
+
