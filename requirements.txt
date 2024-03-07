@@ -13,3 +13,8 @@ sentence-transformers
 sklearn
 nltk
 string
+openai
+fastapi
+uvicorn
+langchain==0.0.345
+chromadb==0.4.22
