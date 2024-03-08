@@ -1,3 +1,4 @@
+import requests
 import streamlit as st
 from amerigo_py_files.unique_ingredients_module import get_unique_ingredients
 import base64
@@ -121,3 +122,12 @@ def switch_page(page_name: str):
     page_names = [standardize_name(config["page_name"]) for config in pages.values()]
 
     raise ValueError(f"Could not find page {page_name}. Must be one of {page_names}")
+
+
+def check_links(urls):
+    good_links = []
+    for url in urls:
+        response = requests.get(url)
+        if response.status_code == 200:
+            good_links.append(url)
+    return good_links
