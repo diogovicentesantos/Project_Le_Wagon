@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from clusters import get_cluster
-from recipe import get_selected_recipe_link_list
+from model.clusters import get_cluster
+from model.recipe import get_selected_recipe_link_list
 
 app = FastAPI()
 
@@ -16,6 +16,8 @@ app.add_middleware(
 )
 
 
+## http://127.0.0.1:8000/recipe?query=I would like a simple and nice recipe for my familly tonight&ingredients=pasta tomato mozzarella
+
 @app.get("/recipe")
 def recipe(
         query: str,
@@ -23,9 +25,10 @@ def recipe(
     ):
 
     cluster_label = get_cluster(ingredients)
-    url_list = get_selected_recipe_link_list(cluster_label, query)
+    name_list, url_list = get_selected_recipe_link_list(cluster_label, query)
 
     my_dict = {
+    'name_list': name_list,
     'url_list': url_list
     }
 
