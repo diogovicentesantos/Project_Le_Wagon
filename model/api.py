@@ -23,9 +23,11 @@ def recipe(
     ):
 
     cluster_label = get_cluster(ingredients)
-    url_list = get_selected_recipe_link_list(cluster_label, query)
+    name_list, url_list = get_selected_recipe_link_list(cluster_label, query)
+    url_list = check_links(url_list)
 
     my_dict = {
+    'name_list': name_list,
     'url_list': url_list
     }
 
