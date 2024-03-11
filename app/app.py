@@ -1,11 +1,21 @@
-
 import streamlit as st
-from amerigo_py_files.unique_ingredients_module import get_unique_ingredients
+#from amerigo_py_files.unique_ingredients_module import get_unique_ingredients
 from amerigo_py_files.amerigo_functions import *
 
-#set_background('/Users/amerigogiol/code/diogovicentesantos/Project_Le_Wagon/app/backgrounds/Presentation1_page-0001.jpg')
+import os
+
+parent_dir = os.getcwd()
+filepath = os.path.join(parent_dir, "app", "backgrounds", "dipping-nacho-chips.jpg")
+set_background(filepath)
+
 st.header('WELCOME TO RECEIPT GENERATOR')
-st.subheader('Find recipes that suits you based on: the ingredients you have, your allergies, time available and, HOW YOU ARE FEELING!')
+st.write('Find recipes that suits you based on:')
+st.write('- the ingredients you have')
+st.write('- your allergies')
+st.write('- your available time')
+st.write('- HOW YOU ARE FEELING!')
+
+st.write(" ")
 
 btn = st.button('Press Here to start')
 

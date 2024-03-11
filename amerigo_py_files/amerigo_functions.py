@@ -2,6 +2,7 @@ import requests
 import streamlit as st
 from amerigo_py_files.unique_ingredients_module import get_unique_ingredients
 import base64
+
 def main_text_storage():
     user_text = st.text_input("Enter your text:")
 
@@ -109,7 +110,7 @@ def switch_page(page_name: str):
 
     page_name = standardize_name(page_name)
 
-    pages = get_pages("streamlit_app.py")  # OR whatever your main page is called
+    pages = get_pages("app.py")
 
     for page_hash, config in pages.items():
         if standardize_name(config["page_name"]) == page_name:
