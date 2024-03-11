@@ -35,21 +35,22 @@ def preferences():
 
     return selected_preferences
 
+#background-color: #f0f2f6; /* Set your desired background color */
 
 def background():
     # Set background color
     st.markdown(
+
         """
         <style>
             body {
-                background-color: #f0f2f6; /* Set your desired background color */
             }
             /* Set background image */
             body::before {
                 content: '';
                 background-image: url('background.jpg');
-                background-size: cover;
-                background-position: center center;
+                background-size: contain;
+                background-position: center;
                 background-repeat: no-repeat;
                 position: fixed;
                 top: 0;
