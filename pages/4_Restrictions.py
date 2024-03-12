@@ -5,7 +5,7 @@ from amerigo_py_files.amerigo_functions import *
 import os
 
 parent_dir = os.getcwd()
-filepath = os.path.join(parent_dir, "app", "backgrounds", "light_blue-lewagon-project-fresh-colourful-ingredients-mexican-cuisine.jpg")
+filepath = os.path.join(parent_dir, "background", "light_blue-lewagon-project-fresh-colourful-ingredients-mexican-cuisine.jpg")
 set_background(filepath)
 
 

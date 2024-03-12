@@ -81,6 +81,7 @@ def load_preprocessed_dataset_with_ingredients():
 def get_selected_recipe_link_list(cluster_label, query, ingredient_list = []):
 
     warning = ""
+    ingredient_list = [item.lower() for item in ingredient_list]
 
     if WITH_FILTER == "yes":
         preprocessed_dataset = load_preprocessed_dataset_with_ingredients()

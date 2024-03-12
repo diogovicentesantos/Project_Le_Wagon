@@ -1,11 +1,10 @@
 import streamlit as st
-#from amerigo_py_files.unique_ingredients_module import get_unique_ingredients
 from amerigo_py_files.amerigo_functions import *
 
 import os
 
 parent_dir = os.getcwd()
-filepath = os.path.join(parent_dir, "app", "backgrounds", "dipping-nacho-chips.jpg")
+filepath = os.path.join(parent_dir, "background", "dipping-nacho-chips.jpg")
 set_background(filepath)
 
 st.header('WELCOME TO RECEIPT GENERATOR')

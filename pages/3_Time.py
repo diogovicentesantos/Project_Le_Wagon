@@ -5,7 +5,7 @@ from amerigo_py_files.amerigo_functions import *
 import os
 
 parent_dir = os.getcwd()
-filepath = os.path.join(parent_dir, "app", "backgrounds", "doughnuts-yellow-lewagon-projecttop-view-donuts-chocolate-yellow-floor.jpg")
+filepath = os.path.join(parent_dir, "background", "doughnuts-yellow-lewagon-projecttop-view-donuts-chocolate-yellow-floor.jpg")
 set_background(filepath)
 
 # Select Time Interface

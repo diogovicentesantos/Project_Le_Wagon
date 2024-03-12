@@ -5,7 +5,7 @@ from amerigo_py_files.amerigo_functions import *
 import os
 
 parent_dir = os.getcwd()
-filepath = os.path.join(parent_dir, "app", "backgrounds", "blue-lewagon-project-noodles-with-vegetables-with-copy-space.jpg")
+filepath = os.path.join(parent_dir, "background", "blue-lewagon-project-noodles-with-vegetables-with-copy-space.jpg")
 set_background(filepath)
 
 st.title("What do you feel like having?:spaghetti: ")
