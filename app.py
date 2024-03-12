@@ -3,6 +3,18 @@ from amerigo_py_files.amerigo_functions import *
 
 import os
 
+st.set_page_config(initial_sidebar_state="collapsed")
+st.markdown(
+    """
+<style>
+    [data-testid="collapsedControl"] {
+        display: none
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
 parent_dir = os.getcwd()
 filepath = os.path.join(parent_dir, "background", "dipping-nacho-chips.jpg")
 set_background(filepath)
