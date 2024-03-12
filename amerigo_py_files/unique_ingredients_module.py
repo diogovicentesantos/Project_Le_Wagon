@@ -34,30 +34,35 @@ def get_unique_ingredients():
 
 
 def load_ingredient_list():
-
-    if LOAD_MODEL == "gcp":
-        # Specify your bucket name and file name
-        bucket_name = BUCKET_NAME
-        blob_name = 'element_list.pkl'
-
-        # Initialize the client
-        client = storage.Client()
-
-        # Get the bucket and blob
-        bucket = client.get_bucket(bucket_name)
-        blob = bucket.blob(blob_name)
-
-        # Download the blob to an in-memory file
-        in_memory_file = io.BytesIO()
-        blob.download_to_file(in_memory_file)
-        in_memory_file.seek(0)  # Important: move back to the start of the file before reading
-
-        # Load the model directly from the in-memory file
-        ingredient_list = pickle.load(in_memory_file)
-
-    else:
+    try:
         parent_dir = os.getcwd()
         filepath = os.path.join(parent_dir, "raw_data", "element_list.pkl")
         ingredient_list = pickle.load(open(filepath,"rb"))
+        return ingredient_list
+    except:
+        if LOAD_MODEL == "gcp":
+            # Specify your bucket name and file name
+            bucket_name = BUCKET_NAME
+            blob_name = 'element_list.pkl'
 
-    return ingredient_list
+            # Initialize the client
+            client = storage.Client()
+
+            # Get the bucket and blob
+            bucket = client.get_bucket(bucket_name)
+            blob = bucket.blob(blob_name)
+
+            # Download the blob to an in-memory file
+            in_memory_file = io.BytesIO()
+            blob.download_to_file(in_memory_file)
+            in_memory_file.seek(0)  # Important: move back to the start of the file before reading
+
+            # Load the model directly from the in-memory file
+            ingredient_list = pickle.load(in_memory_file)
+
+        else:
+            parent_dir = os.getcwd()
+            filepath = os.path.join(parent_dir, "raw_data", "element_list.pkl")
+            ingredient_list = pickle.load(open(filepath,"rb"))
+
+        return ingredient_list

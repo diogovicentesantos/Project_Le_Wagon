@@ -13,17 +13,20 @@ st.title("Ingredients🥬🍎")
 
 # Define your list of elements
 elements = load_ingredient_list()
-st.session_state.selected_ingredients_list = st.multiselect("Select ingredients", elements)
-st.session_state.selected_ingredients_text = " ".join(st.session_state.selected_ingredients_list)
+if elements is not None:
+    st.session_state.selected_ingredients_list = st.multiselect("Select ingredients", elements)
+    st.session_state.selected_ingredients_text = " ".join(st.session_state.selected_ingredients_list)
 
-st.markdown(" ")  # Adds a space
-st.markdown(" ")  # Adds a space
+    st.markdown(" ")  # Adds a space
+    st.markdown(" ")  # Adds a space
 
-# Create two columns for the buttons
-col1, spacer, col2 = st.columns([1, 2, 1])
+    # Create two columns for the buttons
+    col1, spacer, col2 = st.columns([1, 2, 1])
 
-# Place the second button in the second column
-with col2:
-    btn = st.button('Next: Your mood')
-    if btn:
-        switch_page('Feelings')
+    # Place the second button in the second column
+    with col2:
+        btn = st.button('Next: Your mood')
+        if btn:
+            switch_page('Feelings')
+else:
+    st.error("Error loading ingredient list!")
