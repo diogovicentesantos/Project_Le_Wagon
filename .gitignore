@@ -7,4 +7,3 @@ notebooks
 .ipynb_checkpoints
 .env
 secrets.toml
-__pycache__
