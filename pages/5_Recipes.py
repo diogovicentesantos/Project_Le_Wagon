@@ -2,6 +2,17 @@ import streamlit as st
 from amerigo_py_files.amerigo_functions import *
 from model.main import main
 
+st.set_page_config(initial_sidebar_state="collapsed")
+st.markdown(
+    """
+<style>
+    [data-testid="collapsedControl"] {
+        display: none
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
 
 import os
 
@@ -9,7 +20,7 @@ parent_dir = os.getcwd()
 filepath = os.path.join(parent_dir, "background", "flat-lay-concept-clipboard.jpg")
 set_background(filepath)
 
-name_list, recipe_link_list, warning = main(st.session_state.selected_ingredients_text, st.session_state.user_text, st.session_state.selected_ingredients_list)
+name_list, recipe_link_list, warning = main(st.session_state.selected_ingredients_text, st.session_state.user_text, st.session_state.selected_ingredients_list, st.session_state.filter_mode)
 
 if name_list == []:
     st.write("Sorry, we couldn't indentify recipes suited to your request")
