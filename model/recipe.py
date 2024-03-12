@@ -72,7 +72,7 @@ def load_preprocessed_dataset_with_ingredients():
         filepath = os.path.join(parent_dir, "raw_data", "preprocessed_data_with_ingredients.pkl")
         preprocessed_dataset_with_ingredients = pickle.load(open(filepath,"rb"))
 
-    print("\n✅ preprocessed_dataset with ingredients loaded \n")
+    print("\n✅ preprocessed_dataset_with_ingredients loaded \n")
 
     return preprocessed_dataset_with_ingredients
 
@@ -91,9 +91,11 @@ def get_selected_recipe_link_list(cluster_label, query, ingredient_list = []):
         try:
             selected_data = preprocessed_dataset
             for ingredient in ingredient_list:
+                print("Filtering this ingredient: "+ ingredient)
                 selected_data = selected_data.loc[selected_data['ingredients'].str.contains(ingredient)]
 
-            print("After filter: "+str(len(selected_data)))
+            print("After filter: "+str(len(selected_data))+" (it will be capped at 6600)")
+            selected_data = selected_data.loc[:6600]
         except:
             warning = "No recipe matches your combination of ingredients, we selected recipes that had close ingredients"
             print(warning)
@@ -119,7 +121,8 @@ def get_selected_recipe_link_list(cluster_label, query, ingredient_list = []):
                                                         model="text-embedding-ada-002"))
 
         # Querying the data
-        selected_docs = vector_db.similarity_search(query, k = min(LANGCHAIN_CLOSEST_DOCS,nb_recipe_in_cluster))
+        total_query = "Can you find the recipe de most adapted to a person that indicated me: "+query
+        selected_docs = vector_db.similarity_search(total_query, k = min(LANGCHAIN_CLOSEST_DOCS,nb_recipe_in_cluster))
 
         recipe_link_list = []
         name_list = []
