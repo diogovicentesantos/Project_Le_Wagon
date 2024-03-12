@@ -20,31 +20,24 @@ parent_dir = os.getcwd()
 filepath = os.path.join(parent_dir, "background", "red-fruits-vegetables-arrangement-top-view.jpg")
 set_background(filepath)
 
-
-st.title("Ingredients🥬🍎")
+st.title("Ingredients:leafy_green::apple:")
 
 # Define your list of elements
 elements = load_ingredient_list()
-<<<<<<< HEAD
-if elements is not None:
-    st.session_state.selected_ingredients_list = st.multiselect("Select ingredients", elements)
-    st.session_state.selected_ingredients_text = " ".join(st.session_state.selected_ingredients_list)
-=======
+
+st.session_state.selected_ingredients_list = 'No ingredients selected so far'
 st.session_state.selected_ingredients_list = st.multiselect("Select ingredients", elements)
 st.session_state.selected_ingredients_text = " ".join(st.session_state.selected_ingredients_list)
 st.session_state.filter_mode = st.selectbox("Select filter style", ["filter_only", "cluster_filter", "cluster_only"])
->>>>>>> main
 
-    st.markdown(" ")  # Adds a space
-    st.markdown(" ")  # Adds a space
+st.markdown(" ")  # Adds a space
+st.markdown(" ")  # Adds a space
 
-    # Create two columns for the buttons
-    col1, spacer, col2 = st.columns([1, 2, 1])
+# Create two columns for the buttons
+col1, spacer, col2 = st.columns([1, 2, 1])
 
-    # Place the second button in the second column
-    with col2:
-        btn = st.button('Next: Your mood')
-        if btn:
-            switch_page('Feelings')
-else:
-    st.error("Error loading ingredient list!")
+# Place the second button in the second column
+with col2:
+    btn = st.button('Next: Your mood')
+    if btn:
+        switch_page('Feelings')
