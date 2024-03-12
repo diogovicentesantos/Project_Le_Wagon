@@ -34,7 +34,6 @@ def get_unique_ingredients():
 
 
 def load_ingredient_list():
-
     if LOAD_MODEL == "gcp":
         # Specify your bucket name and file name
         bucket_name = BUCKET_NAME

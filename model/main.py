@@ -1,6 +1,7 @@
 from model.clusters import get_cluster
 from model.recipe import get_selected_recipe_link_list
 
+
 def main(ingredient_text, user_prompt, selected_ingredients_list=[], filter_mode=""):
 
 
