@@ -87,7 +87,6 @@ def get_selected_recipe_link_list(cluster_label, query, ingredient_list = []):
         preprocessed_dataset = load_preprocessed_dataset_with_ingredients()
         #selected_data = preprocessed_dataset[preprocessed_dataset["cluster_label"]==cluster_label]
 
-        #print("Before filter: "+str(len(selected_data)))
         try:
             selected_data = preprocessed_dataset
             for ingredient in ingredient_list:
@@ -95,20 +94,20 @@ def get_selected_recipe_link_list(cluster_label, query, ingredient_list = []):
                 selected_data = selected_data.loc[selected_data['ingredients'].str.contains(ingredient)]
 
             print("After filter: "+str(len(selected_data))+" (it will be capped at 6600)")
-            selected_data = selected_data.loc[:6600]
+            selected_data = selected_data.iloc[:6600]
         except:
             warning = "No recipe matches your combination of ingredients, we selected recipes that had close ingredients"
             print(warning)
-            selected_data = []
+            selected_data = preprocessed_dataset[preprocessed_dataset["cluster_label"]==cluster_label]
 
     else:
         preprocessed_dataset = load_preprocessed_dataset()
         selected_data = preprocessed_dataset[preprocessed_dataset["cluster_label"]==cluster_label]
 
 
-    nb_recipe_in_cluster = len(selected_data)
+    nb_recipe_selected = len(selected_data)
 
-    if nb_recipe_in_cluster > 0:
+    if nb_recipe_selected > 0:
         ## Create langchain list of documents
 
         docs = []
@@ -121,8 +120,9 @@ def get_selected_recipe_link_list(cluster_label, query, ingredient_list = []):
                                                         model="text-embedding-ada-002"))
 
         # Querying the data
-        total_query = "Can you find the recipe de most adapted to a person that indicated me: "+query
-        selected_docs = vector_db.similarity_search(total_query, k = min(LANGCHAIN_CLOSEST_DOCS,nb_recipe_in_cluster))
+        total_query = "Can you find the recipe the most adapted to a person that indicated me: "+query
+
+        selected_docs = vector_db.similarity_search(total_query, k = min(LANGCHAIN_CLOSEST_DOCS,nb_recipe_selected))
 
         recipe_link_list = []
         name_list = []
