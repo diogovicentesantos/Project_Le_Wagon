@@ -2,6 +2,7 @@ import requests
 import streamlit as st
 from amerigo_py_files.unique_ingredients_module import get_unique_ingredients
 import base64
+
 def main_text_storage():
     user_text = st.text_input("Enter your text:")
 
@@ -35,21 +36,22 @@ def preferences():
 
     return selected_preferences
 
+#background-color: #f0f2f6; /* Set your desired background color */
 
 def background():
     # Set background color
     st.markdown(
+
         """
         <style>
             body {
-                background-color: #f0f2f6; /* Set your desired background color */
             }
             /* Set background image */
             body::before {
                 content: '';
                 background-image: url('background.jpg');
-                background-size: cover;
-                background-position: center center;
+                background-size: contain;
+                background-position: center;
                 background-repeat: no-repeat;
                 position: fixed;
                 top: 0;
@@ -108,7 +110,7 @@ def switch_page(page_name: str):
 
     page_name = standardize_name(page_name)
 
-    pages = get_pages("streamlit_app.py")  # OR whatever your main page is called
+    pages = get_pages("app.py")
 
     for page_hash, config in pages.items():
         if standardize_name(config["page_name"]) == page_name:
