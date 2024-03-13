@@ -52,8 +52,4 @@ st.markdown(" ")  # Adds a space
 st.markdown(" ")  # Adds a space
 
 st.markdown('<span style="text-decoration: underline; font-style: italic;">Selected Ingredients:</span>', unsafe_allow_html=True)
-if st.session_state.selected_ingredients_text:
-    text_to_display = f"""*{st.session_state.selected_ingredients_text}*"""
-    st.markdown(text_to_display)
-else:
-    st.markdown("No ingredients selected yet.")  # Or a custom message
+st.markdown(f"""*{st.session_state.selected_ingredients_text}*""")

@@ -7,3 +7,5 @@ openai
 langchain
 chromadb
 google-cloud-storage
+gcsfs
+st-files-connection

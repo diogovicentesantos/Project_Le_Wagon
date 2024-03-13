@@ -25,6 +25,7 @@ st.title("Ingredients:leafy_green::apple:")
 # Define your list of elements
 elements = load_ingredient_list()
 
+
 st.session_state.selected_ingredients_list = 'No ingredients selected so far'
 st.session_state.selected_ingredients_list = st.multiselect("Select ingredients", elements)
 st.session_state.selected_ingredients_text = " ".join(st.session_state.selected_ingredients_list)
