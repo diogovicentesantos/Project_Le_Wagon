@@ -87,16 +87,16 @@ def get_cosine(igre_embedding):
             dataset_embeddings_10 = pickle.loads(blob.download_as_string())
             return dataset_embeddings_10
         except Exception as e:
-        print(f"Error loading embeddings from GCS: {e}")
-        return None
+            print(f"Error loading embeddings from GCS: {e}")
+            return None
     else:
         parent_dir = os.getcwd()
         filepath = os.path.join(parent_dir, "raw_data", "ten_embeddings_temp_array_nom.pkl")
         dataset_embeddings_10 = pickle.load(open(filepath,"rb"))
-    ingre_embedding_reshapped = igre_embedding.reshape(1, 1536)
-    cos_sim_ingre_embed = cosine_similarity(ingre_embedding_reshapped, dataset_embeddings_10)
+        ingre_embedding_reshapped = igre_embedding.reshape(1, 1536)
+        cos_sim_ingre_embed = cosine_similarity(ingre_embedding_reshapped, dataset_embeddings_10)
 
-    return cos_sim_ingre_embed
+        return cos_sim_ingre_embed
 
 
 
