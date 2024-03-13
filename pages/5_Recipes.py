@@ -20,7 +20,14 @@ parent_dir = os.getcwd()
 filepath = os.path.join(parent_dir, "background", "flat-lay-concept-clipboard.jpg")
 set_background(filepath)
 
-name_list, recipe_link_list, warning = main(st.session_state.selected_ingredients_text, st.session_state.user_text, st.session_state.selected_ingredients_list, st.session_state.filter_mode)
+name_list, recipe_link_list, warning = main(
+    st.session_state.get('selected_ingredients_text',''),
+    st.session_state.user_text,
+    st.session_state.selected_ingredients_list,
+    st.session_state.filter_mode
+    )
+
+
 
 if name_list == []:
     st.write("Sorry, we couldn't indentify recipes suited to your request")
