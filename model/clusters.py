@@ -37,7 +37,7 @@ def load_model():
     #     in_memory_file.seek(0)  # Important: move back to the start of the file before reading
 
         # Load the model directly from the in-memory file
-        model = conn.load_file("gs://bucket-for-testing-madrid/km_model_OpenAi.pkl")#pickle.load(in_memory_file)
+        model = pickle.loads(conn.download("gs://bucket-for-testing-madrid/km_model_OpenAi.pkl"))#pickle.load(in_memory_file)
 
     else:
         parent_dir = os.getcwd()
@@ -77,7 +77,7 @@ def get_cosine(igre_embedding):
         # in_memory_file.seek(0)  # Important: move back to the start of the file before reading
 
         # Load the model directly from the in-memory file
-        dataset_embeddings_10 = conn.load_file("gs://bucket-for-testing-madrid/ten_embeddings_temp_array_nom.pkl")#pickle.load(in_memory_file)
+        dataset_embeddings_10 = pickle.loads(conn.download("gs://bucket-for-testing-madrid/ten_embeddings_temp_array_nom.pkl"))#pickle.load(in_memory_file)
 
     else:
         parent_dir = os.getcwd()
