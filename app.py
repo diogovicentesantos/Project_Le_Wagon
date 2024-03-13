@@ -16,7 +16,7 @@ st.markdown(
 )
 
 parent_dir = os.getcwd()
-filepath = os.path.join(parent_dir, "background", "dipping-nacho-chips.jpg")
+filepath = os.path.join(parent_dir, "background", "f_app-lewagon-project.png")
 set_background(filepath)
 
 st.header('WELCOME TO RECEIPT GENERATOR')

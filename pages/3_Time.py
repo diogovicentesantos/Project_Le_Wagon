@@ -17,7 +17,7 @@ st.markdown(
 )
 
 parent_dir = os.getcwd()
-filepath = os.path.join(parent_dir, "background", "doughnuts-yellow-lewagon-projecttop-view-donuts-chocolate-yellow-floor.jpg")
+filepath = os.path.join(parent_dir, "background", "f_time-lewagon-project.png")
 set_background(filepath)
 
 # Select Time Interface
@@ -25,7 +25,6 @@ st.subheader("Time Available")
 
 # Display a slider for time selection
 st.session_state.selected_time = st.slider("Select Time(min):", 0, 240, step=5, value=(0, 240))
-st.write(st.session_state.selected_time)
 
 st.markdown(" ")  # Adds a space
 st.markdown(" ")  # Adds a space
@@ -43,9 +42,9 @@ with col1:
 
 # Place the second button in the second column
 with col2:
-    btn = st.button('Next: Restrictions')
+    btn = st.button('Next: Recipes')
     if btn:
-        switch_page('Restrictions')
+        switch_page('Recipes')
 
 
 st.markdown(" ")  # Adds a space

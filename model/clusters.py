@@ -43,9 +43,9 @@ def get_embedding(ingredients_text):
     '''Get embedding of the ingredients text'''
     openai_model = "text-embedding-ada-002"
     openai.api_key = OPENAI_KEY
-    igre_embedding = openai.embeddings.create(input = ingredients_text, model = openai_model)
+    igre_embedding = openai.Embedding.create(input = ingredients_text, model = openai_model) # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX openai.embeddings.create
 
-    return np.array(igre_embedding.data[0].embedding)
+    return np.array(igre_embedding["data"][0]["embedding"]) # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX igre_embedding.data[0].embedding
 
 
 def get_cosine(igre_embedding):

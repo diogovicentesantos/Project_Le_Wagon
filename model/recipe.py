@@ -77,42 +77,16 @@ def load_preprocessed_dataset_with_ingredients():
     return preprocessed_dataset_with_ingredients
 
 
-
-def get_selected_recipe_link_list(cluster_label, query, ingredient_list = [], filter_mode =""):
-
-    warning = ""
-    ingredient_list = [item.lower() for item in ingredient_list]
-
-    if filter_mode != "":
-        WITH_FILTER = filter_mode
-
-    print("You are in mode: "+ WITH_FILTER)
-
-    if WITH_FILTER == "filter_only":
-        preprocessed_dataset = load_preprocessed_dataset_with_ingredients()
-
-        selected_data = preprocessed_dataset
+def run_ingredient_filter(selected_data, ingredient_list, preprocessed_dataset, cluster_label):
         for ingredient in ingredient_list:
-            selected_data = selected_data.loc[selected_data['ingredients'].str.contains(ingredient)]
-            print("Filtering this ingredient: "+ ingredient+". Nb left: "+str(len(selected_data)))
+            temporary_selected_data = selected_data.loc[selected_data['ingredients'].str.contains(ingredient)]
+            if len(temporary_selected_data) != 0:
+                selected_data = temporary_selected_data
+                print("Filtering this ingredient: "+ ingredient+". Nb left: "+str(len(selected_data)))
+            else:
+                print("We stopped the filtering at & excluding : "+ ingredient+", as otherwise not recipes were left")
+                break
 
-        print("Number of recipes selected via filter: "+str(len(selected_data))+" (it will be capped at 6600)")
-        selected_data = selected_data.iloc[:6600]
-
-        if len(selected_data) == 0:
-            warning = "No recipe matches your combination of ingredients, we selected recipes that had close ingredients"
-            print(warning)
-            selected_data = preprocessed_dataset[preprocessed_dataset["cluster_label"]==cluster_label]
-            print("Number of recipes selected via cluster: "+ str(len(selected_data)))
-
-    elif WITH_FILTER == "cluster_filter":
-        preprocessed_dataset = load_preprocessed_dataset_with_ingredients()
-        selected_data = preprocessed_dataset[preprocessed_dataset["cluster_label"]==cluster_label]
-        print("Number of recipes selected via cluster: "+ str(len(selected_data)))
-
-        for ingredient in ingredient_list:
-            selected_data = selected_data.loc[selected_data['ingredients'].str.contains(ingredient)]
-            print("Filtering this ingredient: "+ ingredient+". Nb left: "+str(len(selected_data)))
 
         print("Number of recipes selected after filter: "+str(len(selected_data))+" (it will be capped at 6600)")
         selected_data = selected_data.iloc[:6600]
@@ -123,14 +97,51 @@ def get_selected_recipe_link_list(cluster_label, query, ingredient_list = [], fi
             selected_data = preprocessed_dataset[preprocessed_dataset["cluster_label"]==cluster_label]
             print("Number of recipes selected via cluster: "+ str(len(selected_data)))
 
-    else:
-        preprocessed_dataset = load_preprocessed_dataset()
+        return selected_data
+
+
+
+def get_selected_recipe_link_list(cluster_label, query, time, ingredient_list = [], filter_mode =""):
+
+    ######### Filter by Ingredients ##########
+    warning = ""
+    ingredient_list = [item.lower() for item in ingredient_list]
+
+    if filter_mode != "":
+        WITH_FILTER = filter_mode
+
+    print("You are in mode: "+ WITH_FILTER)
+
+    if WITH_FILTER == "filter_only":
+        preprocessed_dataset = load_preprocessed_dataset_with_ingredients()
+        selected_data = preprocessed_dataset
+
+        selected_data = run_ingredient_filter(selected_data, ingredient_list, preprocessed_dataset, cluster_label)
+
+    elif WITH_FILTER == "cluster_filter":
+        preprocessed_dataset = load_preprocessed_dataset_with_ingredients()
         selected_data = preprocessed_dataset[preprocessed_dataset["cluster_label"]==cluster_label]
         print("Number of recipes selected via cluster: "+ str(len(selected_data)))
 
+        selected_data = run_ingredient_filter(selected_data, ingredient_list, preprocessed_dataset, cluster_label)
 
+    else:
+        preprocessed_dataset = load_preprocessed_dataset_with_ingredients()
+        selected_data = preprocessed_dataset[preprocessed_dataset["cluster_label"]==cluster_label]
+        print("Number of recipes selected via cluster: "+ str(len(selected_data)))
+
+    ######### Filter by Time ##########
+    temporary_selected_data = selected_data[(selected_data["minutes"]>=time[0]) & (selected_data["minutes"]<=time[1])]
+    if len(temporary_selected_data) != 0:
+        selected_data = temporary_selected_data
+        print("Filtering by time range "+ str(time)+". Nb left: "+str(len(selected_data)))
+    else:
+        print("We did not use the time filtering "+ str(time)+", as otherwise not recipes were left")
+
+
+    ######### Langchain process ##########
     nb_recipe_selected = len(selected_data)
-    print("Number of recipes selected: "+ str(nb_recipe_selected))
+    print("Final number of recipes selected: "+ str(nb_recipe_selected))
 
     if nb_recipe_selected > 0:
         ## Create langchain list of documents
@@ -147,30 +158,54 @@ def get_selected_recipe_link_list(cluster_label, query, ingredient_list = [], fi
         # Querying the data
         total_query = "Can you find the recipe the most adapted to a person that indicated me: "+query
 
-        selected_docs = vector_db.similarity_search(total_query, k = min(LANGCHAIN_CLOSEST_DOCS,nb_recipe_selected))
+        selected_docs = vector_db.similarity_search_with_score(total_query, k = min(LANGCHAIN_CLOSEST_DOCS,nb_recipe_selected))
         print("Number of selected docs in Langchain: "+ str(len(selected_docs)))
 
+        recipe_id_list = []
         recipe_link_list = []
         name_list = []
-        for item in selected_docs:
-            search_string = item.page_content
-            try:
-                filtered_df = selected_data.loc[selected_data['final_text'].str.contains(search_string)]
-                recipe_link_list.append(filtered_df["link"].tolist())
-                name_list.append(filtered_df["name"].tolist())
-            except:
-                pass
+        similarity_score_list = []
+        for doc in selected_docs:
+            search_string = doc[0].page_content
 
+            filtered_df = selected_data.loc[selected_data['final_text'].str.contains(search_string)]
+            recipe_id_list.append(filtered_df["recipe_id"].tolist())
+            recipe_link_list.append(filtered_df["link"].tolist())
+            name_list.append(filtered_df["name"].tolist())
+            similarity_score_list.append([float(doc[1])]*len(filtered_df["name"].tolist()))
 
+        recipe_id_list = [item for sublist in recipe_id_list for item in sublist]
         name_list = [item for sublist in name_list for item in sublist]
         recipe_link_list = [item for sublist in recipe_link_list for item in sublist]
+        similarity_score_list = [item for sublist in similarity_score_list for item in sublist]
         print("Number of matched docs between Langchain selection & original data: "+ str(len(name_list)))
 
     else:
+        recipe_id_list = []
         name_list = []
         recipe_link_list = []
+
 
     print("\n✅ name_list is \n")
     print(name_list)
 
-    return name_list, recipe_link_list, warning
+    ### Get % of ingredients present & time validated ###
+    perc_ingre_list = []
+    time_ok_list = []
+    for recipe_id in recipe_id_list:
+        count = 0
+
+        recipe_df_select = preprocessed_dataset[preprocessed_dataset["recipe_id"]==recipe_id]
+
+        for ingre in ingredient_list:
+            if ingre in recipe_df_select["ingredients"].iloc[0]:
+                count = count + 1
+        perc_ingre_list.append(count/len(ingredient_list))
+
+        time_ok = "no"
+        if (recipe_df_select["minutes"].iloc[0]>=time[0]) and (recipe_df_select["minutes"].iloc[0]<=time[1]):
+            time_ok = "yes"
+        time_ok_list.append(time_ok)
+
+
+    return recipe_id_list, name_list, recipe_link_list, similarity_score_list, perc_ingre_list, time_ok_list, warning

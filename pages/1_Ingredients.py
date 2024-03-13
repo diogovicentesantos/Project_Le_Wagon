@@ -17,7 +17,7 @@ st.markdown(
 )
 
 parent_dir = os.getcwd()
-filepath = os.path.join(parent_dir, "background", "red-fruits-vegetables-arrangement-top-view.jpg")
+filepath = os.path.join(parent_dir, "background", "f_ingredients-fruits-and-vegetable-lewagon-project.png")
 set_background(filepath)
 
 st.title("Ingredients:leafy_green::apple:")

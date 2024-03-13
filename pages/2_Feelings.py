@@ -17,7 +17,7 @@ st.markdown(
 )
 
 parent_dir = os.getcwd()
-filepath = os.path.join(parent_dir, "background", "blue-lewagon-project-noodles-with-vegetables-with-copy-space.jpg")
+filepath = os.path.join(parent_dir, "background", "f_text-lewagon-project.png")
 set_background(filepath)
 
 st.title("What do you feel like having?:spaghetti: ")
