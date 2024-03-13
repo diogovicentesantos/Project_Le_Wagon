@@ -19,7 +19,7 @@ conn = st.connection('gcs', type=FilesConnection)
 def load_model():
     '''Load the fited kmeans cluster model'''
 
-    # if LOAD_MODEL == "gcp":
+    if LOAD_MODEL == "gcp":
     #     # Specify your bucket name and file name
     #     bucket_name = BUCKET_NAME
     #     blob_name = 'km_model_OpenAi.pkl'
