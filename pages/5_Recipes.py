@@ -2,7 +2,7 @@ import streamlit as st
 from amerigo_py_files.amerigo_functions import *
 from model.main import main
 
-st.set_page_config(initial_sidebar_state="collapsed")
+# st.set_page_config(initial_sidebar_state="collapsed")
 st.markdown(
     """
 <style>

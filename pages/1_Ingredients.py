@@ -4,7 +4,7 @@ from amerigo_py_files.amerigo_functions import *
 
 import os
 
-st.set_page_config(initial_sidebar_state="collapsed")
+# st.set_page_config(initial_sidebar_state="collapsed")
 st.markdown(
     """
 <style>
