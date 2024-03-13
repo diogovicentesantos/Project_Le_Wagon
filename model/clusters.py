@@ -65,39 +65,76 @@ def get_embedding(ingredients_text):
 
     return np.array(igre_embedding.data[0].embedding)
 
-
 def get_cosine(igre_embedding):
-    ''' Get cosine matrix vs. trained embeddings'''
-
     if LOAD_MODEL == "gcp":
-        # # Specify your bucket name and file name
-        # bucket_name = BUCKET_NAME
-        # blob_name = 'ten_embeddings_temp_array_nom.pkl'
+        bucket_name = BUCKET_NAME
+        blob_name = 'ten_embeddings_temp_array_nom.pkl'
 
-        # # Initialize the client
-        # client = storage.Client()
+        try:
+            # Initialize the client
+            client = storage.Client()
 
-        # # Get the bucket and blob
-        # bucket = client.get_bucket(bucket_name)
-        # blob = bucket.blob(blob_name)
+            # Get the bucket and blob
+            bucket = client.get_bucket(bucket_name)
+            blob = bucket.blob(blob_name)
 
-        # # Download the blob to an in-memory file
-        # in_memory_file = io.BytesIO()
-        # blob.download_to_file(in_memory_file)
-        # in_memory_file.seek(0)  # Important: move back to the start of the file before reading
+            # Download the blob to an in-memory file (optional)
+            # in_memory_file = io.BytesIO()
+            # blob.download_to_file(in_memory_file)
+            # in_memory_file.seek(0)  # Important: move back to the start of the file
 
-        # Load the model directly from the in-memory file
-        dataset_embeddings_10 = pickle.loads(conn._instance.download("gs://bucket-for-testing-madrid/ten_embeddings_temp_array_nom.pkl"))#pickle.load(in_memory_file)
-
+            # Load the model directly from the downloaded blob (preferred)
+            dataset_embeddings_10 = pickle.loads(blob.download_as_string())
+            return dataset_embeddings_10
+        except Exception as e:
+        print(f"Error loading embeddings from GCS: {e}")
+        return None
     else:
         parent_dir = os.getcwd()
         filepath = os.path.join(parent_dir, "raw_data", "ten_embeddings_temp_array_nom.pkl")
         dataset_embeddings_10 = pickle.load(open(filepath,"rb"))
-
     ingre_embedding_reshapped = igre_embedding.reshape(1, 1536)
     cos_sim_ingre_embed = cosine_similarity(ingre_embedding_reshapped, dataset_embeddings_10)
 
     return cos_sim_ingre_embed
+
+
+
+
+
+
+# def get_cosine(igre_embedding):
+#     ''' Get cosine matrix vs. trained embeddings'''
+
+#     if LOAD_MODEL == "gcp":
+#         # # Specify your bucket name and file name
+#         # bucket_name = BUCKET_NAME
+#         # blob_name = 'ten_embeddings_temp_array_nom.pkl'
+
+#         # # Initialize the client
+#         # client = storage.Client()
+
+#         # # Get the bucket and blob
+#         # bucket = client.get_bucket(bucket_name)
+#         # blob = bucket.blob(blob_name)
+
+#         # # Download the blob to an in-memory file
+#         # in_memory_file = io.BytesIO()
+#         # blob.download_to_file(in_memory_file)
+#         # in_memory_file.seek(0)  # Important: move back to the start of the file before reading
+
+#         # Load the model directly from the in-memory file
+#         dataset_embeddings_10 = pickle.loads(conn._instance.download("gs://bucket-for-testing-madrid/ten_embeddings_temp_array_nom.pkl"))#pickle.load(in_memory_file)
+
+#     else:
+#         parent_dir = os.getcwd()
+#         filepath = os.path.join(parent_dir, "raw_data", "ten_embeddings_temp_array_nom.pkl")
+#         dataset_embeddings_10 = pickle.load(open(filepath,"rb"))
+
+#     ingre_embedding_reshapped = igre_embedding.reshape(1, 1536)
+#     cos_sim_ingre_embed = cosine_similarity(ingre_embedding_reshapped, dataset_embeddings_10)
+
+#     return cos_sim_ingre_embed
 
 
 def get_cluster(ingredients_text):
