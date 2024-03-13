@@ -11,28 +11,33 @@ from langchain.vectorstores import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.docstore.document import Document
 
+from st_files_connection import FilesConnection
+conn = st.connection('gcs', type=FilesConnection)
+
+
+
 def load_preprocessed_dataset():
     '''Load the preprocessed dataset'''
 
     if LOAD_MODEL == "gcp":
-        # Specify your bucket name and file name
-        bucket_name = BUCKET_NAME
-        blob_name = 'preprocessed_data.pkl'
+        # # Specify your bucket name and file name
+        # bucket_name = BUCKET_NAME
+        # blob_name = 'preprocessed_data.pkl'
 
-        # Initialize the client
-        client = storage.Client()
+        # # Initialize the client
+        # client = storage.Client()
 
-        # Get the bucket and blob
-        bucket = client.get_bucket(bucket_name)
-        blob = bucket.blob(blob_name)
+        # # Get the bucket and blob
+        # bucket = client.get_bucket(bucket_name)
+        # blob = bucket.blob(blob_name)
 
-        # Download the blob to an in-memory file
-        in_memory_file = io.BytesIO()
-        blob.download_to_file(in_memory_file)
-        in_memory_file.seek(0)  # Important: move back to the start of the file before reading
+        # # Download the blob to an in-memory file
+        # in_memory_file = io.BytesIO()
+        # blob.download_to_file(in_memory_file)
+        # in_memory_file.seek(0)  # Important: move back to the start of the file before reading
 
         # Load the model directly from the in-memory file
-        preprocessed_dataset = pickle.load(in_memory_file)
+        preprocessed_dataset = conn.load_file("gs://bucket-for-testing-madrid/preprocessed_data.pkl")#pickle.load(in_memory_file)
 
     else:
         parent_dir = os.getcwd()
@@ -48,24 +53,24 @@ def load_preprocessed_dataset_with_ingredients():
     '''Load the preprocessed dataset with ingredients'''
 
     if LOAD_MODEL == "gcp":
-        # Specify your bucket name and file name
-        bucket_name = BUCKET_NAME
-        blob_name = 'preprocessed_data_with_ingredients.pkl'
+        # # Specify your bucket name and file name
+        # bucket_name = BUCKET_NAME
+        # blob_name = 'preprocessed_data_with_ingredients.pkl'
 
-        # Initialize the client
-        client = storage.Client()
+        # # Initialize the client
+        # client = storage.Client()
 
-        # Get the bucket and blob
-        bucket = client.get_bucket(bucket_name)
-        blob = bucket.blob(blob_name)
+        # # Get the bucket and blob
+        # bucket = client.get_bucket(bucket_name)
+        # blob = bucket.blob(blob_name)
 
-        # Download the blob to an in-memory file
-        in_memory_file = io.BytesIO()
-        blob.download_to_file(in_memory_file)
-        in_memory_file.seek(0)  # Important: move back to the start of the file before reading
+        # # Download the blob to an in-memory file
+        # in_memory_file = io.BytesIO()
+        # blob.download_to_file(in_memory_file)
+        # in_memory_file.seek(0)  # Important: move back to the start of the file before reading
 
-        # Load the model directly from the in-memory file
-        preprocessed_dataset_with_ingredients = pickle.load(in_memory_file)
+        # # Load the model directly from the in-memory file
+        preprocessed_dataset_with_ingredients = conn.load_file("gs://bucket-for-testing-madrid/preprocessed_data.pkl")#pickle.load(in_memory_file)
 
     else:
         parent_dir = os.getcwd()
