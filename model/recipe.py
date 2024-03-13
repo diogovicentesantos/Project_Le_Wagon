@@ -70,7 +70,7 @@ def load_preprocessed_dataset_with_ingredients():
         # in_memory_file.seek(0)  # Important: move back to the start of the file before reading
 
         # # Load the model directly from the in-memory file
-        preprocessed_dataset_with_ingredients = conn.load_file("gs://bucket-for-testing-madrid/preprocessed_data.pkl")#pickle.load(in_memory_file)
+        preprocessed_dataset_with_ingredients = conn.load_file("gs://bucket-for-testing-madrid/preprocessed_data_with_ingredients.pkl")#pickle.load(in_memory_file)
 
     else:
         parent_dir = os.getcwd()
