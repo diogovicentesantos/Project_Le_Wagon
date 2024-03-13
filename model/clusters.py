@@ -7,21 +7,20 @@ from model.params import *
 import numpy as np
 from google.cloud import storage
 import io
+import subprocess
 
 from st_files_connection import FilesConnection
 conn = st.connection('gcs', type=FilesConnection)
-# element_list_csv = conn.read("recipe-lewagon-madrid-project/element_list.csv", input_format="csv", ttl=600)
 
 
 
 def load_model():
   try:
     # Download the file using gsutil with a local path
-    local_model_path = "local_model.pkl"
-    subprocess.run(["gsutil", "cp", "gs://bucket-for-testing-madrid/km_model_OpenAi.pkl", local_model_path])
-    with open(local_model_path, "rb") as f:
-      model = pickle.load(f)
-    return model
+    model_data = subprocess.check_output(["gsutil", "cat", "gs://bucket-for-testing-madrid/km_model_OpenAi.pkl"])
+    with io.BytesIO(model_data) as f:
+        loaded_model = pickle.load(f)
+    return loaded_model
   except Exception as e:
     print(f"Error loading model: {e}")
     return None
