@@ -14,12 +14,22 @@ conn = st.connection('gcs', type=FilesConnection)
 
 
 
-
-
 def load_model():
-    '''Load the fited kmeans cluster model'''
+  try:
+    # Download the file using gsutil with a local path
+    local_model_path = "local_model.pkl"
+    subprocess.run(["gsutil", "cp", "gs://bucket-for-testing-madrid/km_model_OpenAi.pkl", local_model_path])
+    with open(local_model_path, "rb") as f:
+      model = pickle.load(f)
+    return model
+  except Exception as e:
+    print(f"Error loading model: {e}")
+    return None
 
-    if LOAD_MODEL == "gcp":
+# def load_model():
+#     '''Load the fited kmeans cluster model'''
+
+#     if LOAD_MODEL == "gcp":
     #     # Specify your bucket name and file name
     #     bucket_name = BUCKET_NAME
     #     blob_name = 'km_model_OpenAi.pkl'
@@ -37,14 +47,14 @@ def load_model():
     #     in_memory_file.seek(0)  # Important: move back to the start of the file before reading
 
         # Load the model directly from the in-memory file
-        model = pickle.loads(conn._instance.download("gs://bucket-for-testing-madrid/km_model_OpenAi.pkl"))#pickle.load(in_memory_file)
+    #     model = pickle.loads(conn._instance.download("gs://bucket-for-testing-madrid/km_model_OpenAi.pkl"))#pickle.load(in_memory_file)
 
-    else:
-        parent_dir = os.getcwd()
-        filepath = os.path.join(parent_dir, "raw_data", "km_model_OpenAi.pkl")
-        model = pickle.load(open(filepath,"rb"))
+    # else:
+    #     parent_dir = os.getcwd()
+    #     filepath = os.path.join(parent_dir, "raw_data", "km_model_OpenAi.pkl")
+    #     model = pickle.load(open(filepath,"rb"))
 
-    return model
+    # return model
 
 
 def get_embedding(ingredients_text):
