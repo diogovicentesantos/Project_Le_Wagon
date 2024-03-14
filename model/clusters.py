@@ -91,8 +91,10 @@ def get_cosine(igre_embedding):
         filepath = os.path.join(parent_dir, "raw_data", "ten_embeddings_temp_array_nom.pkl")
         dataset_embeddings_10 = pickle.load(open(filepath,"rb"))
 
+    print("dataset_embeddings_10", dataset_embeddings_10.shape)
     ingre_embedding_reshapped = igre_embedding.reshape(1, 1536)
     cos_sim_ingre_embed = cosine_similarity(ingre_embedding_reshapped, dataset_embeddings_10)
+    print("cos_sim_ingre_embed", cos_sim_ingre_embed.shape)
 
     return cos_sim_ingre_embed
 
@@ -112,6 +114,7 @@ def get_cluster(ingredients_text):
     cos_sim_ingre_embed = get_cosine(ingre_embedding)
 
     # Get clusters
+    print("cos_sim_ingre_embed before model", cos_sim_ingre_embed)
     cluster_label = model.predict(cos_sim_ingre_embed)
 
     print("\n✅ get_cluster() done \n")

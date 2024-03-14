@@ -4,7 +4,7 @@ from streamlit_extras.switch_page_button import switch_page
 import subprocess
 import os
 
-subprocess.run(['pip', 'install', '-e', '.'])
+
 
 
 __import__('pysqlite3')
@@ -37,7 +37,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Use the custom class in your header
-st.markdown('<h1 class="centered">WELCOME TO RECEIPT GENERATOR!</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="centered">WELCOME TO RECIPE GENERATOR!</h1>', unsafe_allow_html=True)
 
 st.write(" ")
 st.write(" ")
