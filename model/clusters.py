@@ -15,16 +15,24 @@ conn = st.connection('gcs', type=FilesConnection)
 ten_embeddings_temp_array_nom = conn.read("recipe-lewagon-madrid-project/ten_embeddings_temp_array_nom.csv", input_format="csv", ttl=600)
 
 
-
 def load_model():
-    #try:
-    model_data = subprocess.check_output(["gsutil", "cat", "gs://bucket-for-testing-madrid/km_model_OpenAi.pkl"])
-    with io.BytesIO(model_data) as f:
-        loaded_model = pickle.load(f)
+  """Loads the KMeans model from the 'model' folder."""
+  parent_dir = os.getcwd()
+  filepath = os.path.join(parent_dir, "model", "local_model.pkl")
+  with open(filepath, "rb") as f:
+      model = pickle.load(f)
+  return model
 
-        # if loaded_model is None:
 
-    return loaded_model
+# def load_model():
+#     #try:
+#     model_data = subprocess.check_output(["gsutil", "cat", "gs://bucket-for-testing-madrid/km_model_OpenAi.pkl"])
+#     with io.BytesIO(model_data) as f:
+#         loaded_model = pickle.load(f)
+
+#         # if loaded_model is None:
+
+#     return loaded_model
 
 
     #except Exception as e:
