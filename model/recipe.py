@@ -13,6 +13,9 @@ from langchain.docstore.document import Document
 
 from st_files_connection import FilesConnection
 conn = st.connection('gcs', type=FilesConnection)
+preprocessed_data = conn.read("recipe-lewagon-madrid-project/preprocessed_data.csv", input_format="csv", ttl=600)
+preprocessed_data_with_ingredients = conn.read("recipe-lewagon-madrid-project/preprocessed_dataset_with_ingredients.csv", input_format="csv", ttl=600)
+
 
 
 
@@ -37,7 +40,7 @@ def load_preprocessed_dataset():
         # in_memory_file.seek(0)  # Important: move back to the start of the file before reading
 
         # Load the model directly from the in-memory file
-        preprocessed_dataset = conn.load_file("gs://bucket-for-testing-madrid/preprocessed_data.pkl")#pickle.load(in_memory_file)
+        preprocessed_dataset = preprocessed_data#conn.load_file("gs://bucket-for-testing-madrid/preprocessed_data.pkl")#pickle.load(in_memory_file)
 
     else:
         parent_dir = os.getcwd()
@@ -70,7 +73,7 @@ def load_preprocessed_dataset_with_ingredients():
         # in_memory_file.seek(0)  # Important: move back to the start of the file before reading
 
         # # Load the model directly from the in-memory file
-        preprocessed_dataset_with_ingredients = conn.load_file("gs://bucket-for-testing-madrid/preprocessed_data_with_ingredients.pkl")#pickle.load(in_memory_file)
+        preprocessed_dataset_with_ingredients = preprocessed_data_with_ingredients#conn.load_file("gs://bucket-for-testing-madrid/preprocessed_data_with_ingredients.pkl")#pickle.load(in_memory_file)
 
     else:
         parent_dir = os.getcwd()

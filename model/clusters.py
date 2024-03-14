@@ -12,12 +12,18 @@ import subprocess
 from st_files_connection import FilesConnection
 conn = st.connection('gcs', type=FilesConnection)
 
+ten_embeddings_temp_array_nom = conn.read("recipe-lewagon-madrid-project/ten_embeddings_temp_array_nom.csv", input_format="csv", ttl=600)
+
+
 
 def load_model():
     #try:
     model_data = subprocess.check_output(["gsutil", "cat", "gs://bucket-for-testing-madrid/km_model_OpenAi.pkl"])
     with io.BytesIO(model_data) as f:
         loaded_model = pickle.load(f)
+
+        if loaded_model is None:
+
     return loaded_model
     #except Exception as e:
     #    print(f"Error loading model: {e}")
@@ -107,16 +113,16 @@ def get_embedding(ingredients_text):
 
 def get_cosine(igre_embedding):
     if LOAD_MODEL == "gcp":
-        bucket_name = BUCKET_NAME
-        blob_name = 'ten_embeddings_temp_array_nom.pkl'
+        # bucket_name = BUCKET_NAME
+        # blob_name = 'ten_embeddings_temp_array_nom.pkl'
 
-        try:
+        # try:
             # Initialize the client
-            client = storage.Client()
+            # client = storage.Client()
 
             # Get the bucket and blob
-            bucket = client.get_bucket(bucket_name)
-            blob = bucket.blob(blob_name)
+            # bucket = client.get_bucket(bucket_name)
+            # blob = bucket.blob(blob_name)
 
             # Download the blob to an in-memory file (optional)
             # in_memory_file = io.BytesIO()
@@ -124,11 +130,11 @@ def get_cosine(igre_embedding):
             # in_memory_file.seek(0)  # Important: move back to the start of the file
 
             # Load the model directly from the downloaded blob (preferred)
-            dataset_embeddings_10 = pickle.loads(blob.download_as_string())
+            dataset_embeddings_10 = ten_embeddings_temp_array_nom#pickle.loads(blob.download_as_string())
             return dataset_embeddings_10
-        except Exception as e:
-            print(f"Error loading embeddings from GCS: {e}")
-            return None
+        # except Exception as e:
+        #     print(f"Error loading embeddings from GCS: {e}")
+        #     return None
     else:
         parent_dir = os.getcwd()
         filepath = os.path.join(parent_dir, "raw_data", "ten_embeddings_temp_array_nom.pkl")
