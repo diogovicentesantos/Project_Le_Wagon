@@ -22,9 +22,11 @@ def load_model():
     with io.BytesIO(model_data) as f:
         loaded_model = pickle.load(f)
 
-        if loaded_model is None:
+        # if loaded_model is None:
 
     return loaded_model
+
+
     #except Exception as e:
     #    print(f"Error loading model: {e}")
     #    return None
