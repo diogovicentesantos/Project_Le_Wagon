@@ -14,14 +14,14 @@ conn = st.connection('gcs', type=FilesConnection)
 
 
 def load_model():
-    try:
-        model_data = subprocess.check_output(["gsutil", "cat", "gs://bucket-for-testing-madrid/km_model_OpenAi.pkl"])
-        with io.BytesIO(model_data) as f:
-            loaded_model = pickle.load(f)
-        return loaded_model
-    except Exception as e:
-        print(f"Error loading model: {e}")
-        return None
+    #try:
+    model_data = subprocess.check_output(["gsutil", "cat", "gs://bucket-for-testing-madrid/km_model_OpenAi.pkl"])
+    with io.BytesIO(model_data) as f:
+        loaded_model = pickle.load(f)
+    return loaded_model
+    #except Exception as e:
+    #    print(f"Error loading model: {e}")
+    #    return None
 
 
 # def load_model():
