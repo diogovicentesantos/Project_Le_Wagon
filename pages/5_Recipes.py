@@ -22,7 +22,7 @@ set_background(filepath)
 
 name_list, recipe_link_list, warning = main(
     st.session_state.get('selected_ingredients_text',''),
-    'feeling hungry tonight',#st.session_state.user_text,
+    st.session_state.user_text,
     st.session_state.selected_ingredients_list,
     st.session_state.filter_mode
     )
