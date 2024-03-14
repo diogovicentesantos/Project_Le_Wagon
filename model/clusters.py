@@ -18,7 +18,7 @@ ten_embeddings_temp_array_nom = conn.read("recipe-lewagon-madrid-project/ten_emb
 def load_model():
   """Loads the KMeans model from the 'model' folder."""
   parent_dir = os.getcwd()
-  filepath = os.path.join(parent_dir, "local_model.pkl")
+  filepath = os.path.join(parent_dir,'model', "local_model.pkl")
   with open(filepath, "rb") as f:
       model = pickle.load(f)
   return model
