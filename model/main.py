@@ -38,23 +38,20 @@ def get_review_data(recipe_id_list):
 
 
 
-def main(ingredient_text, user_prompt, time, selected_ingredients_list=[], filter_mode=""):
+def main(ingredient_text, user_prompt, time, selected_ingredients_list=[]):
 
+    ingredient_text = ingredient_text.lower()
+    selected_ingredients_list = [item.lower() for item in selected_ingredients_list]
 
     #predict function
     my_clust = get_cluster(ingredient_text)
-    recipe_id_list, name_list, recipe_link_list, similarity_score_list, perc_ingre_list, time_ok_list, warning = get_selected_recipe_link_list(cluster_label=my_clust,
+    final_df, warning = get_selected_recipe_link_list(cluster_label=my_clust,
                                                                          query=user_prompt,
                                                                          time=time,
-                                                                         ingredient_list=selected_ingredients_list,
-                                                                         filter_mode=filter_mode)
+                                                                         ingredient_list=selected_ingredients_list)
 
-    final_df = pd.DataFrame(data = {'recipe_id': recipe_id_list,
-                                    'recipe_name':name_list,
-                                    'recipe_link':recipe_link_list,
-                                    'similarity_score': similarity_score_list,
-                                    'perc_ingre':perc_ingre_list,
-                                    'time_ok':time_ok_list})
+    name_list = final_df["recipe_name"].to_list()
+    recipe_id_list = final_df["recipe_id"].to_list()
 
     recipe_reviews_simple_df = get_review_data(recipe_id_list)
     recipe_reviews_simple_df["recipe_id"] = recipe_reviews_simple_df["recipe_id"].astype("object")

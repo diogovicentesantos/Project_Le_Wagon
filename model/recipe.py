@@ -7,6 +7,10 @@ from model.params import *
 from google.cloud import storage
 import io
 
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 from langchain.vectorstores import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.docstore.document import Document
@@ -77,22 +81,18 @@ def load_preprocessed_dataset_with_ingredients():
     return preprocessed_dataset_with_ingredients
 
 
-def run_ingredient_filter(selected_data, ingredient_list, preprocessed_dataset, cluster_label):
-        for ingredient in ingredient_list:
-            temporary_selected_data = selected_data.loc[selected_data['ingredients'].str.contains(ingredient)]
-            if len(temporary_selected_data) != 0:
-                selected_data = temporary_selected_data
-                print("Filtering this ingredient: "+ ingredient+". Nb left: "+str(len(selected_data)))
-            else:
-                print("We stopped the filtering at & excluding : "+ ingredient+", as otherwise not recipes were left")
-                break
+def run_ingredient_filter(ingredient_list, preprocessed_dataset, cluster_label):
+        selected_data = preprocessed_dataset
 
+        for ingredient in ingredient_list:
+            selected_data = selected_data.loc[selected_data['ingredients'].str.contains(ingredient)]
+            print("Filtering this ingredient: "+ ingredient+". Nb left: "+str(len(selected_data)))
 
         print("Number of recipes selected after filter: "+str(len(selected_data))+" (it will be capped at 6600)")
         selected_data = selected_data.iloc[:6600]
 
-        if len(selected_data) == 0:
-            warning = "No recipe matches your combination of ingredients, we selected recipes that had close ingredients"
+        if len(selected_data) < 50:
+            warning = "No recipe matches your combination of ingredients, we selected recipes in the spirit of your ingredients...."
             print(warning)
             selected_data = preprocessed_dataset[preprocessed_dataset["cluster_label"]==cluster_label]
             print("Number of recipes selected via cluster: "+ str(len(selected_data)))
@@ -101,42 +101,26 @@ def run_ingredient_filter(selected_data, ingredient_list, preprocessed_dataset, 
 
 
 
-def get_selected_recipe_link_list(cluster_label, query, time, ingredient_list = [], filter_mode =""):
+def get_selected_recipe_link_list(cluster_label, query, time, ingredient_list = []):
+
+    ingredient_list = [item.lower() for item in ingredient_list]
 
     ######### Filter by Ingredients ##########
     warning = ""
     ingredient_list = [item.lower() for item in ingredient_list]
 
-    if filter_mode != "":
-        WITH_FILTER = filter_mode
-
-    print("You are in mode: "+ WITH_FILTER)
-
-    if WITH_FILTER == "filter_only":
-        preprocessed_dataset = load_preprocessed_dataset_with_ingredients()
-        selected_data = preprocessed_dataset
-
-        selected_data = run_ingredient_filter(selected_data, ingredient_list, preprocessed_dataset, cluster_label)
-
-    elif WITH_FILTER == "cluster_filter":
-        preprocessed_dataset = load_preprocessed_dataset_with_ingredients()
-        selected_data = preprocessed_dataset[preprocessed_dataset["cluster_label"]==cluster_label]
-        print("Number of recipes selected via cluster: "+ str(len(selected_data)))
-
-        selected_data = run_ingredient_filter(selected_data, ingredient_list, preprocessed_dataset, cluster_label)
-
-    else:
-        preprocessed_dataset = load_preprocessed_dataset_with_ingredients()
-        selected_data = preprocessed_dataset[preprocessed_dataset["cluster_label"]==cluster_label]
-        print("Number of recipes selected via cluster: "+ str(len(selected_data)))
+    preprocessed_dataset = load_preprocessed_dataset_with_ingredients()
+    selected_data = run_ingredient_filter(ingredient_list, preprocessed_dataset, cluster_label)
 
     ######### Filter by Time ##########
     temporary_selected_data = selected_data[(selected_data["minutes"]>=time[0]) & (selected_data["minutes"]<=time[1])]
-    if len(temporary_selected_data) != 0:
+    if len(temporary_selected_data) > 10:
         selected_data = temporary_selected_data
         print("Filtering by time range "+ str(time)+". Nb left: "+str(len(selected_data)))
     else:
-        print("We did not use the time filtering "+ str(time)+", as otherwise not recipes were left")
+        time_warning = "We did not use the time filtering, as otherwise very few recipes were left"
+        warning = warning + "\n"+time_warning
+        print(time_warning)
 
 
     ######### Langchain process ##########
@@ -208,4 +192,13 @@ def get_selected_recipe_link_list(cluster_label, query, time, ingredient_list = 
         time_ok_list.append(time_ok)
 
 
-    return recipe_id_list, name_list, recipe_link_list, similarity_score_list, perc_ingre_list, time_ok_list, warning
+    final_df = pd.DataFrame(data = {'recipe_id': recipe_id_list,
+                                    'recipe_name':name_list,
+                                    'recipe_link':recipe_link_list,
+                                    'similarity_score': similarity_score_list,
+                                    'perc_ingre':perc_ingre_list,
+                                    'time_ok':time_ok_list})
+
+    final_df = final_df.drop_duplicates(subset=['recipe_name'], keep='first')
+
+    return final_df, warning

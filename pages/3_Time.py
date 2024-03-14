@@ -1,8 +1,13 @@
 import streamlit as st
 from amerigo_py_files.unique_ingredients_module import get_unique_ingredients
 from amerigo_py_files.amerigo_functions import *
+from streamlit_extras.switch_page_button import switch_page
 
 import os
+
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 st.set_page_config(initial_sidebar_state="collapsed")
 st.markdown(

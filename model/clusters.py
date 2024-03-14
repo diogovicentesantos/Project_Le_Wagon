@@ -85,6 +85,8 @@ def get_cosine(igre_embedding):
 def get_cluster(ingredients_text):
     '''Get Cluster based on ingredients'''
 
+    ingredients_text = ingredients_text.lower()
+
     #Load Model
     model = load_model()
 

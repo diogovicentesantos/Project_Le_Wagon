@@ -1,8 +1,13 @@
 import streamlit as st
 from amerigo_py_files.unique_ingredients_module import get_unique_ingredients
 from amerigo_py_files.amerigo_functions import *
+from streamlit_extras.switch_page_button import switch_page
 
 import os
+
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 st.set_page_config(initial_sidebar_state="collapsed")
 st.markdown(
@@ -20,8 +25,15 @@ parent_dir = os.getcwd()
 filepath = os.path.join(parent_dir, "background", "f_text-lewagon-project.png")
 set_background(filepath)
 
-st.title("What do you feel like having?:spaghetti: ")
-st.subheader('(e.g: I would like a warm meal for my family on a cold winter night)')
+st.title("😋 What do you feel like having? 🍽️")
+st.markdown(" ")  # Adds a space
+st.markdown(" ")  # Adds a space
+st.markdown("A few examples:")
+st.markdown("""*- I would like a warm meal on this cold winter night*""")
+st.markdown("""*- I need an easy recipe for my kids*""")
+st.markdown("""*- I am in a bad mood, I need something that cheers me up!*""")
+st.markdown(" ")  # Adds a space
+st.markdown(" ")  # Adds a space
 
 # Text input box for the user
 st.session_state.user_text = st.text_input("Enter your feelings:")

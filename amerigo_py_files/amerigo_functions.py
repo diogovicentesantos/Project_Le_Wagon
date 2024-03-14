@@ -96,13 +96,14 @@ def set_background(png_file):
     ''' % bin_str
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-def switch_page(page_name: str):
+def switch_page_amerigo(page_name: str):
     """
     Switch page programmatically in a multipage app
 
     Args:
         page_name (str): Target page name
     """
+
     from streamlit.runtime.scriptrunner import RerunData, RerunException
     from streamlit.source_util import get_pages
 
