@@ -10,3 +10,4 @@ google-cloud-storage
 gcsfs
 st-files-connection
 gsutil
+pysqlite3-binary
