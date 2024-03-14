@@ -12,3 +12,4 @@ st-files-connection
 gsutil
 pysqlite3-binary
 langchain-community==0.0.28
+langchain-openai==0.0.8

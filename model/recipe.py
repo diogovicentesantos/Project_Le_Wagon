@@ -25,6 +25,8 @@ preprocessed_data_with_ingredients = conn.read("recipe-lewagon-madrid-project/pr
 
 # subprocess.run(['pip', 'install', 'chromadb', '--upgrade'])
 # subprocess.run(['pip' , 'install', '-U', 'langchain-community'])
+subprocess.run(['pip' , 'install', '-U', 'langchain-openai'])
+
 
 def load_preprocessed_dataset():
     '''Load the preprocessed dataset'''
