@@ -10,4 +10,4 @@ google-cloud-storage
 gcsfs
 st-files-connection
 gsutil
-sqlite
+sqlite == 3.45.1
