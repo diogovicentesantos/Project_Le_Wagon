@@ -11,3 +11,4 @@ gcsfs
 st-files-connection
 gsutil
 pysqlite3-binary
+langchain-community
