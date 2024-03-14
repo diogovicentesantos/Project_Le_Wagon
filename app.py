@@ -2,6 +2,9 @@ import streamlit as st
 from amerigo_py_files.amerigo_functions import *
 
 import os
+import sqlite3
+
+
 
 ######################### New code Diogo - test ################################
 # from st_files_connection import FilesConnection
@@ -35,6 +38,7 @@ parent_dir = os.getcwd()
 filepath = os.path.join(parent_dir, "background", "dipping-nacho-chips.jpg")
 set_background(filepath)
 
+st.write(sqlite3.sqlite_version_info)
 st.header('WELCOME TO RECEIPT GENERATOR')
 st.write('Find recipes that suits you based on:')
 st.write('- the ingredients you have')
