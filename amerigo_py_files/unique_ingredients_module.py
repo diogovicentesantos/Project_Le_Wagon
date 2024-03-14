@@ -6,6 +6,12 @@ import io
 from model.params import *
 import pickle
 
+############################ Diogo Changes #####################################
+import streamlit as st
+from st_files_connection import FilesConnection
+conn = st.connection('gcs', type=FilesConnection)
+element_list_csv = conn.read("recipe-lewagon-madrid-project/element_list.csv", input_format="csv", ttl=600)
+############################ Previous Code #####################################
 
 def remove_punctuation_and_capitalize(word_list):
     # Define a translation table to remove punctuation
@@ -35,25 +41,25 @@ def get_unique_ingredients():
 
 def load_ingredient_list():
     if LOAD_MODEL == "gcp":
-        # Specify your bucket name and file name
-        bucket_name = BUCKET_NAME
-        blob_name = 'element_list.pkl'
+        # # Specify your bucket name and file name
+        # bucket_name = BUCKET_NAME
+        # blob_name = 'element_list.pkl'
 
-        # Initialize the client
-        client = storage.Client()
+        # # Initialize the client
+        # client = storage.Client()
 
-        # Get the bucket and blob
-        bucket = client.get_bucket(bucket_name)
-        blob = bucket.blob(blob_name)
+        # # Get the bucket and blob
+        # bucket = client.get_bucket(bucket_name)
+        # blob = bucket.blob(blob_name)
 
-        # Download the blob to an in-memory file
-        in_memory_file = io.BytesIO()
-        blob.download_to_file(in_memory_file)
-        in_memory_file.seek(0)  # Important: move back to the start of the file before reading
+        # # Download the blob to an in-memory file
+        # in_memory_file = io.BytesIO()
+        # blob.download_to_file(in_memory_file)
+        # in_memory_file.seek(0)  # Important: move back to the start of the file before reading
 
-        # Load the model directly from the in-memory file
-        ingredient_list = pickle.load(in_memory_file)
-
+        # # Load the model directly from the in-memory file
+        # ingredient_list = pickle.load(in_memory_file)
+        ingredient_list = element_list_csv
     else:
         parent_dir = os.getcwd()
         filepath = os.path.join(parent_dir, "raw_data", "element_list.pkl")
