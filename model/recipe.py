@@ -6,6 +6,7 @@ import pickle
 from model.params import *
 from google.cloud import storage
 import io
+import subprocess
 
 from langchain.vectorstores import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -22,7 +23,7 @@ preprocessed_data = conn.read("recipe-lewagon-madrid-project/preprocessed_data.c
 preprocessed_data_with_ingredients = conn.read("recipe-lewagon-madrid-project/preprocessed_data_with_ingredients.csv", input_format="csv", ttl=600)
 
 
-
+subprocess.run(['pip', 'install', 'chromadb', '--upgrade'])
 
 def load_preprocessed_dataset():
     '''Load the preprocessed dataset'''
