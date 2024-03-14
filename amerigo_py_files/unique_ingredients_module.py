@@ -10,13 +10,7 @@ import pickle
 import streamlit as st
 from st_files_connection import FilesConnection
 conn = st.connection('gcs', type=FilesConnection)
-element_list_pkl = conn.read("recipe-lewagon-madrid-project/element_list.csv", input_format="csv", ttl=600)
-
-
-
-
-
-
+element_list_csv = conn.read("recipe-lewagon-madrid-project/element_list.csv", input_format="csv", ttl=600)
 
 ############################ Previous Code #####################################
 
@@ -66,7 +60,7 @@ def load_ingredient_list():
         # in_memory_file.seek(0)  # Important: move back to the start of the file before reading
 
         # Load the model directly from the in-memory file
-        ingredient_list = element_list_pkl#pickle.load(in_memory_file)
+        ingredient_list = element_list_csv#pickle.load(in_memory_file)
 
     else:
         parent_dir = os.getcwd()
