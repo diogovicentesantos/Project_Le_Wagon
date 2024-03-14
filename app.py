@@ -1,8 +1,11 @@
 import streamlit as st
 from amerigo_py_files.amerigo_functions import *
 from streamlit_extras.switch_page_button import switch_page
-
+import subprocess
 import os
+
+subprocess.run(['pip', 'install', '-e', '.'])
+
 
 __import__('pysqlite3')
 import sys
