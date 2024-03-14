@@ -12,7 +12,7 @@ import subprocess
 from st_files_connection import FilesConnection
 conn = st.connection('gcs', type=FilesConnection)
 
-ten_embeddings_temp_array_nom = conn.read("recipe-lewagon-madrid-project/ten_embeddings_temp_array_nom.csv", input_format="csv", ttl=600)
+ten_embeddings_temp_array_nom = conn.read("recipe-lewagon-madrid-project/ten_embeddings_temp_array_nom.csv", input_format="csv", ttl=600).to_numpy()
 
 
 def load_model():
@@ -141,7 +141,7 @@ def get_cosine(igre_embedding):
 
             # Load the model directly from the downloaded blob (preferred)
             dataset_embeddings_10 = ten_embeddings_temp_array_nom#pickle.loads(blob.download_as_string())
-            return dataset_embeddings_10
+            # return dataset_embeddings_10
         # except Exception as e:
         #     print(f"Error loading embeddings from GCS: {e}")
         #     return None
