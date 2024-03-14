@@ -23,8 +23,8 @@ preprocessed_data = conn.read("recipe-lewagon-madrid-project/preprocessed_data.c
 preprocessed_data_with_ingredients = conn.read("recipe-lewagon-madrid-project/preprocessed_data_with_ingredients.csv", input_format="csv", ttl=600)
 
 
-subprocess.run(['pip', 'install', 'chromadb', '--upgrade'])
-subprocess.run(['pip' , 'install', '-U', 'langchain-community'])
+# subprocess.run(['pip', 'install', 'chromadb', '--upgrade'])
+# subprocess.run(['pip' , 'install', '-U', 'langchain-community'])
 
 def load_preprocessed_dataset():
     '''Load the preprocessed dataset'''
