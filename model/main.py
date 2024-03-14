@@ -10,7 +10,8 @@ import pickle
 from st_files_connection import FilesConnection
 
 conn = st.connection('gcs', type=FilesConnection)
-recipe_reviews_simple_df_from_gcp = conn.read("bucket-for-testing-madrid/recipe_reviews_simple.csv", input_format="csv", ttl=600).to_numpy()
+recipe_reviews_simple_np_from_gcp = conn.read("bucket-for-testing-madrid/recipe_reviews_simple.csv", input_format="csv", ttl=600).to_numpy()
+recipe_reviews_simple_df_from_gcp = pd.DataFrame(recipe_reviews_simple_np_from_gcp, columns=["recipe_id", "nb_reviews", "avg_rating"])
 #################################################################################
 
 def get_review_data(recipe_id_list):
