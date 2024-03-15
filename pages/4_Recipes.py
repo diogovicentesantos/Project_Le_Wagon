@@ -39,7 +39,7 @@ final_df, warning, message = main(ingredient_text= st.session_state.selected_ing
 
 loading_message.empty()
 
-st.markdown(message)
+#st.markdown(message)
 
 if len(final_df) == 0:
     st.markdown("<br><br><br>", unsafe_allow_html=True)
