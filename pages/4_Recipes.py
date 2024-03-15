@@ -36,7 +36,7 @@ loading_message.markdown("<br><br><br><br>Wait for it... 😊 We are working on 
 if not st.session_state["recipes_loaded"]:
 
     parent_dir = os.getcwd()
-    filepath = os.path.join(parent_dir, "background", "rsz_output-flat-lay-concept-clipboard.jpg")
+    filepath = os.path.join(parent_dir, "background", "rsz_output-flat-lay-concept-clipboard.png")
     set_background(filepath)
 
 
