@@ -11,50 +11,66 @@ __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
-subprocess.run(['pip', 'install', '-e', '.'])
+# Store a flag in session state to track button clicks
+if "app_loaded" not in st.session_state:
+    st.session_state["app_loaded"] = False
 
-st.set_page_config(initial_sidebar_state="collapsed")
-st.markdown(
-    """
-<style>
-    [data-testid="collapsedControl"] {
-        display: none
+# Load data for the Recipes page (if necessary)
+if not st.session_state["app_loaded"]:
+
+    subprocess.run(['pip', 'install', '-e', '.'])
+
+    st.set_page_config(initial_sidebar_state="collapsed")
+    st.markdown(
+        """
+    <style>
+        [data-testid="collapsedControl"] {
+            display: none
+        }
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    parent_dir = os.getcwd()
+    filepath = os.path.join(parent_dir, "background", "f_app-lewagon-project.png")
+    set_background(filepath)
+
+    # Custom CSS to center the header
+    st.markdown("""
+    <style>
+    .centered {
+    text-align: center;
     }
-</style>
-""",
-    unsafe_allow_html=True,
-)
+    </style>
+    """, unsafe_allow_html=True)
 
-parent_dir = os.getcwd()
-filepath = os.path.join(parent_dir, "background", "f_app-lewagon-project.png")
-set_background(filepath)
+    # Use the custom class in your header
+    st.markdown('<h1 class="centered">WELCOME TO RECIPE GENERATOR!</h1>', unsafe_allow_html=True)
 
-# Custom CSS to center the header
-st.markdown("""
-<style>
-.centered {
-  text-align: center;
-}
-</style>
-""", unsafe_allow_html=True)
+    st.write(" ")
+    st.write(" ")
+    st.write(" ")
 
-# Use the custom class in your header
-st.markdown('<h1 class="centered">WELCOME TO RECIPE GENERATOR!</h1>', unsafe_allow_html=True)
+    st.write('Find recipes that suits you based on:')
+    st.write('- the ingredients you have')
+    st.write('- your available time')
+    st.write('- and .... HOW YOU ARE FEELING! 🙂')
 
-st.write(" ")
-st.write(" ")
-st.write(" ")
-
-st.write('Find recipes that suits you based on:')
-st.write('- the ingredients you have')
-st.write('- your available time')
-st.write('- and .... HOW YOU ARE FEELING! 🙂')
-
-st.write(" ")
-st.write(" ")
-st.write(" ")
+    st.write(" ")
+    st.write(" ")
+    st.write(" ")
 
 btn = st.button('Press here to start!')
 
+
 if btn:
-   switch_page('ingredients')
+    # Avoid reloading Recipes page if data is already loaded
+    if st.session_state["app_loaded"]:
+        st.session_state.clear()
+        switch_page('ingredients')
+    else:
+        st.warning("Recipes data is still loading. Please wait before restarting.")
+
+# if btn:
+#    switch_page('ingredients')
