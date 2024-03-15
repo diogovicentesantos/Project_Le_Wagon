@@ -8,7 +8,7 @@ __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
-st.set_page_config(initial_sidebar_state="collapsed")
+#st.set_page_config(initial_sidebar_state="collapsed")
 st.markdown(
     """
 <style>
@@ -40,7 +40,7 @@ if not st.session_state["recipes_loaded"]:
     set_background(filepath)
 
 
-    final_df, warning = main(ingredient_text= st.session_state.selected_ingredients_text,
+    final_df, warning, message = main(ingredient_text= st.session_state.selected_ingredients_text,
                                                 user_prompt= st.session_state.user_text,
                                                 time= st.session_state.selected_time,
                                                 selected_ingredients_list = st.session_state.selected_ingredients_list)
