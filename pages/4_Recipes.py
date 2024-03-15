@@ -32,13 +32,14 @@ filepath = os.path.join(parent_dir, "background", "rsz_output-flat-lay-concept-c
 set_background(filepath)
 
 
-final_df, warning = main(ingredient_text= st.session_state.selected_ingredients_text,
+final_df, warning, message = main(ingredient_text= st.session_state.selected_ingredients_text,
                                             user_prompt= st.session_state.user_text,
                                             time= st.session_state.selected_time,
                                             selected_ingredients_list = st.session_state.selected_ingredients_list)
 
 loading_message.empty()
 
+st.markdown(message)
 
 if len(final_df) == 0:
     st.markdown("<br><br><br>", unsafe_allow_html=True)

@@ -54,7 +54,7 @@ def main(ingredient_text, user_prompt, time, selected_ingredients_list=[]):
 
     #predict function
     my_clust = get_cluster(ingredient_text)
-    final_df, warning = get_selected_recipe_link_list(cluster_label=my_clust,
+    final_df, warning, message = get_selected_recipe_link_list(cluster_label=my_clust,
                                                                          query=user_prompt,
                                                                          time=time,
                                                                          ingredient_list=selected_ingredients_list)
@@ -70,4 +70,4 @@ def main(ingredient_text, user_prompt, time, selected_ingredients_list=[]):
 
     print("\n:white_check_mark: Main Executed \n")
 
-    return final_df, warning
+    return final_df, warning, message
