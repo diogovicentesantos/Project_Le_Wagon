@@ -164,6 +164,8 @@ def get_selected_recipe_link_list(cluster_label, query, time, ingredient_list = 
         similarity_score_list = [item for sublist in similarity_score_list for item in sublist]
         print("Number of matched docs between Langchain selection & original data: "+ str(len(name_list)))
 
+        vector_db.delete_collection()
+
     else:
         recipe_id_list = []
         name_list = []
